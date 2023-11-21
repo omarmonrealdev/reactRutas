@@ -8,14 +8,23 @@ const ProductDetails = () => {
 
   const [ product, setProduct ] = useState({description: '', createdAt: '', updatedAt: ''});
   const [ error, setError ] = useState('');
+  const [ comments, setComments ] = useState([]);
 
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`http://34.94.69.140:8080/products/${id}`)
+    axios.get(`http://34.94.69.140:8080/products/${id}/`)
       .then(res => setProduct(res.data))
       .catch(err => setError(err.message))
   }, [id]);
+
+  useEffect(() => {
+    axios.get(`http://34.94.69.140:8080/products/${id}/reviews/`)
+      .then(res => setComments(res.data))
+      .catch(err => setError(err.message))
+  }, [id]);
+
+  console.log(comments);
 
   return (
     <>
@@ -27,6 +36,7 @@ const ProductDetails = () => {
         <h2>{product.createdAt}</h2>
         <h2>{product.updatedAt}</h2>
       </div>
+      {comments && comments.map(comment => <p key={comment.id}>{comment.content}</p>)}
       <Link to="/" style={{color: "dodgerblue"}}>Regresar a pagina principal</Link>
     </>
   )

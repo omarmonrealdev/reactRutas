@@ -19,7 +19,7 @@ const MainGridNav = () => {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    axios.get('http://34.94.69.140:8080/products')
+    axios.get('http://34.94.69.140:8080/products/')
       .then(res => setProducts(res.data))
       .catch(err => setError(err.message))
   }, []);
