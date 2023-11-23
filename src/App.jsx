@@ -3,10 +3,13 @@ import MainGridNav from "./components/MainGridNav"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import ProductDetails from "./components/ProductDetails"
 import NotFound from "./components/NotFound"
+import Login from "./components/Login"
+import Register from "./components/Register"
 
 
 function App() {
   return (
+    
     <Grid templateAreas={{
       base: `"main"`,
       lg: `"main"`,
@@ -14,7 +17,16 @@ function App() {
       <BrowserRouter>
         <GridItem area='main'>
           <Routes>
+            
             <Route path="/" exact element={
+              <Login />
+            }/>
+
+            <Route path="register" element={
+              <Register />
+            }/>
+
+            <Route path="main" element={
               <MainGridNav />
             }/>
 
