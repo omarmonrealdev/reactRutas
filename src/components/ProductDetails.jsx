@@ -1,84 +1,75 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Box, Button, Flex, Image, Input, SimpleGrid, Text } from '@chakra-ui/react';
-import axios from "axios";
+import { Flex, Image, SimpleGrid, Text } from '@chakra-ui/react';
+import insurgentesmariano from '../assets/images-calafias/insurgentesmariano.png';
 
 
 const ProductDetails = () => {
 
-  const [ product, setProduct ] = useState({description: '', createdAt: '', updatedAt: '', image: ''});
-  const [ error, setError ] = useState('');
-  const [ comments, setComments ] = useState([]);
-  const contentRef = useRef(null);
+  const [products, setProducts] = useState([
+    {
+      id: '1',
+      image: insurgentesmariano,
+      description: 'RUTA: insurgentes - florido - mariano',
+      lugares: ['Parque industrial Otay', 'Zona Industrial Murua', 'Parque Chilpancingo', 'Ley Murua', 'Central Camionera', '5 y 10'],
+      video: 'https://www.youtube.com/embed/Ma1kJcA70yo?si=4OroZT99UvcsibRG',
+    },
+    {
+      id: '2',
+      image: 'https://d2b9vjwb3yw5iu.cloudfront.net/files/Primary/large/lff-st01.jpg',
+      sku: 'LFF-3333',
+      description: 'Contorsionista stress relierver',
+      lugares: ['Parque industrial Otay', 'Zona Industrial Murua', 'Parque Chilpancingo', 'Ley Murua', 'Central Camionera', '5 y 10'],
+      video: 'https://www.youtube.com/embed/Ma1kJcA70yo?si=4OroZT99UvcsibRG',
+    },
+    {
+      id: '3',
+      image: 'https://d2b9vjwb3yw5iu.cloudfront.net/files/Primary/large/lsz-sp20.jpg',
+      sku: 'SPY-4444',
+      description: 'Spy stress relierver',
+      lugares: ['Parque industrial Otay', 'Zona Industrial Murua', 'Parque Chilpancingo', 'Ley Murua', 'Central Camionera', '5 y 10'],
+      video: 'https://www.youtube.com/embed/Ma1kJcA70yo?si=4OroZT99UvcsibRG',
+    },
+    {
+      id: '4',
+      image: 'https://d2b9vjwb3yw5iu.cloudfront.net/files/Primary/large/lff-sh06.jpg',
+      sku: 'HER-5555',
+      description: 'Hero stress relierver',
+      lugares: ['Parque industrial Otay', 'Zona Industrial Murua', 'Parque Chilpancingo', 'Ley Murua', 'Central Camionera', '5 y 10'],
+      video: 'https://www.youtube.com/embed/Ma1kJcA70yo?si=4OroZT99UvcsibRG',
+    }
+  ]);
+  
 
-  const { id } = useParams();
-
-  useEffect(() => {
-    axios.get(`http://34.94.69.140:8080/products/${id}/`)
-      .then(res => setProduct(res.data))
-      .catch(err => setError(err.message))
-  }, [id]);
-
-
-  useEffect(() => {
-    axios.get(`http://34.94.69.140:8080/products/${id}/reviews/`)
-      .then(res => setComments(res.data))
-      .catch(err => setError(err.message))
-  }, [id]);
+const { id } = useParams();  
+const [ product, setProduct ] = useState(products.filter(item => item.id === id));
+  
 
   
-  const onSubmit = (e) => {
-    e.preventDefault();
-    let data;
-
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      };
-
-    if (contentRef.current !== null) {
-      data = {
-        content: contentRef.current.value
-      }
-    }
-    axios.post(`http://34.94.69.140:8080/products/${id}/reviews/`, data, config)
-      .then(res => console.log(res.data))
-      .catch(err => setError(err.message));
-    
-    e.target.reset();  
-  }
-
-
-
-  function getNewComments() {
-    axios.get(`http://34.94.69.140:8080/products/${id}/reviews/`)
-      .then(res => setComments(res.data))
-      .catch(err => setError(err.message))
-  }
 
   return (
     <>
       <Flex justifyContent='center' alignItems='center'>
         
         <SimpleGrid columns={{sm: 1, md: 1, lg: 1, xl: 1}} padding='10px' pt='40px' border={['none', '1px']} borderColor={['', 'gray.300']} borderRadius={10}>
-          {error && <Text>{error}</Text>}
-          <Link to="/main" style={{color: "dodgerblue", textAlign: 'center', marginBottom: '10px'}}>Back to home page</Link>
+          
+          <Link to="/" style={{color: "dodgerblue", textAlign: 'center', marginBottom: '10px'}}>Back to home page</Link>
           <div>
-            <Image borderRadius={10} maxW='md' src={product.image}/>
-            <h1>{product.description}</h1>
-          </div>
-          <div>
-            <Text mt={5} fontWeight='700'>Reviews</Text>
-            <form onSubmit={onSubmit}>
-              <Input ref={contentRef} id="comentario" placeholder="Write a review"  maxW='md'></Input> 
-              <Button type="submit">Submit</Button>
-              <Button onClick={getNewComments} ml={3}>Get new reviews</Button>
-            </form>
-            {comments && comments.map(comment =>
-                                 <Box key={comment.id} mt={15}> 
-                                   <span>{`UserId: ${comment.userId} - Created: ${comment.createdAt.substring(0, 10)}`}</span>
-                                   <p>{comment.content}</p>
-                                 </Box>)
-            }
+
+            <h1>{product[0].description}</h1>
+            <Image borderRadius={10} maxW='md' src={product[0].image}/>
+            
+            <h2>Puntos importantes que recorre:</h2>
+            <ol>
+              {product[0].lugares.map(lugar => <li key={lugar} style={{marginLeft: '10px'}}>{lugar}</li>)}
+            </ol>
+            <iframe
+              id="video"
+              width="400"
+              height="700"
+              src={product[0].video}
+              allowFullScreen
+            ></iframe>       
           </div>
         </SimpleGrid>
       </Flex>

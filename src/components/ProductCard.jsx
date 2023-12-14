@@ -10,7 +10,7 @@ const ProductCard = ({ id, image, sku, description }) => {
       <Card borderRadius={10} overflow='hidden'>
         <Image src={image} />
         <CardBody>
-          <Heading fontSize='1xl'>{'SKU: '+ sku}</Heading>
+          <Heading fontSize='1xl'>{sku}</Heading>
           <Text fontSize='1xl' color='gray.400' marginY={'4px'}>{description}</Text>
         </CardBody>
       </Card>
